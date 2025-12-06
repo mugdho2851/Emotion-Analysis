@@ -9,18 +9,14 @@ import re
 import random
 import matplotlib.pyplot as plt
 
-# -----------------------------------------------------
 # PAGE CONFIG
-# -----------------------------------------------------
 st.set_page_config(
-    page_title="Sentiment Analyzer",
-    page_icon="💬",
+    page_title="Emotion Analyzer",
+    page_icon="😐",
     layout="wide"
 )
 
-# -----------------------------------------------------
 # MODERN UI STYLING (Glassmorphism + Smooth UI)
-# -----------------------------------------------------
 st.markdown("""
 <style>
 
@@ -101,15 +97,11 @@ textarea {
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------------------------------
 # SESSION STATE
-# -----------------------------------------------------
 if "input_text" not in st.session_state:
     st.session_state.input_text = "I love this amazing product!"
 
-# -----------------------------------------------------
 # SIDEBAR
-# -----------------------------------------------------
 with st.sidebar:
     st.header("⚙️ Settings")
 
@@ -134,15 +126,11 @@ with st.sidebar:
     st.markdown("---")
     st.info("This project uses RNN, LSTM, and GRU models trained on Sentiment140 dataset.")
 
-# -----------------------------------------------------
 # HEADER
-# -----------------------------------------------------
-st.markdown('<div class="title">💬 Sentiment Analysis</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">Emotion Analysis</div>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Analyze emotions using deep learning models</p>', unsafe_allow_html=True)
 
-# -----------------------------------------------------
 # TEXT INPUT
-# -----------------------------------------------------
 text = st.text_area(
     "Enter your text:",
     value=st.session_state.input_text,
@@ -169,9 +157,7 @@ with colC:
         st.rerun()
 
 
-# -----------------------------------------------------
 # MODEL LOADING
-# -----------------------------------------------------
 @st.cache_resource
 def load_all_models():
     base = "saved_models"
@@ -204,16 +190,12 @@ def load_all_models():
         return None, None, None
 
 
-# -----------------------------------------------------
 # PREPROCESSING
-# -----------------------------------------------------
 def clean_text(t):
     return re.sub(r'@\S+|https?:\S+|[^A-Za-z0-9 ]+', ' ', t.lower()).strip()
 
 
-# -----------------------------------------------------
 # PREDICT
-# -----------------------------------------------------
 def predict(text, models, tokenizer, max_len):
     seq = tokenizer.texts_to_sequences([clean_text(text)])
     padded = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_len, padding="post")
@@ -226,10 +208,7 @@ def predict(text, models, tokenizer, max_len):
             results[name] = (sentiment, raw, conf)
     return results
 
-
-# -----------------------------------------------------
 # PROCESSING
-# -----------------------------------------------------
 if analyze and text.strip():
     models, tokenizer, params = load_all_models()
 
@@ -287,7 +266,3 @@ if analyze and text.strip():
                 """,
                 unsafe_allow_html=True
             )
-
-# -----------------------------------------------------
-# END
-# -----------------------------------------------------
